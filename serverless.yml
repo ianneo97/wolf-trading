@@ -1,0 +1,23 @@
+service: wolf-trading
+frameworkVersion: "3"
+
+provider:
+  name: aws
+  runtime: nodejs18.x
+  region: ap-southeast-1
+  environment:
+    ALERT_PARAMETER: wolf_alert_status
+
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action:
+            - "ssm:*"
+          Resource: "*"
+
+functions:
+  - ${file(./resources/functions.yml)}
+
+resources:
+  - ${file(./resources/resources.yml)}

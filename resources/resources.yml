@@ -1,0 +1,8 @@
+Resources:
+  AlertStatusParameter:
+    Type: AWS::SSM::Parameter
+    Properties:
+      Name: ${self:provider.environment.ALERT_PARAMETER}
+      Type: String
+      Value: true
+      AllowedPattern: ^(true|false)$

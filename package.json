@@ -1,0 +1,20 @@
+{
+  "name": "wolf-trading",
+  "version": "1.0.0",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ianneo97/wolf-trading.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ianneo97/wolf-trading/issues"
+  },
+  "homepage": "https://github.com/ianneo97/wolf-trading#readme",
+  "dependencies": {
+    "@aws-sdk/client-ssm": "^3.264.0"
+  }
+}
