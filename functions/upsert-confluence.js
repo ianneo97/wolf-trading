@@ -6,7 +6,7 @@ const {
   UpdateItemCommand,
   DeleteItemCommand,
 } = require("@aws-sdk/client-dynamodb");
-const { SSMClient } = require("@aws-sdk/client-ssm");
+const { SSMClient, GetParameterCommand } = require("@aws-sdk/client-ssm");
 
 const client = new DynamoDBClient();
 const ssm = new SSMClient();
@@ -16,11 +16,11 @@ module.exports.handler = async (event) => {
 
   try {
     const ticker = args.ticker;
+    const confluenceDuration = await getConfluenceDuration();
     const existingTicker = await getTicker(ticker);
     let response;
 
     if (existingTicker.Item) {
-      // const newTtl = Math.round(new Date().getTime() / 1000) + 60;
       const ttl = parseInt(existingTicker.Item.ttl.N);
 
       if (isWithin4Hours(ttl)) {
@@ -32,14 +32,14 @@ module.exports.handler = async (event) => {
         };
       } else {
         await deleteTicker(ticker);
-        await createTicker(ticker);
+        await createTicker(ticker, confluenceDuration);
         response = {
           ticker: ticker,
           confluence: 1,
         };
       }
     } else {
-      await createTicker(ticker);
+      await createTicker(ticker, confluenceDuration);
 
       response = {
         ticker: ticker,
@@ -53,8 +53,8 @@ module.exports.handler = async (event) => {
   }
 };
 
-async function createTicker(ticker) {
-  const fourHours = 4 * 60 * 60 * 1000;
+async function createTicker(ticker, confluenceDuration) {
+  const fourHours = confluenceDuration * 60 * 60;
   const ttl = Math.round(new Date().getTime() / 1000) + fourHours;
   const command = new PutItemCommand({
     TableName: process.env.TABLE_NAME,
@@ -111,4 +111,15 @@ function isWithin4Hours(timestamp) {
   const fourHours = 4 * 60 * 60 * 1000;
 
   return givenTime >= now && givenTime <= now + fourHours;
+}
+
+async function getConfluenceDuration() {
+  const command = new GetParameterCommand({
+    Name: process.env.ALERT_DURATION_PARAMETER,
+  });
+
+  const { Parameter } = await ssm.send(command);
+  const response = Parameter.Value;
+
+  return parseInt(response);
 }
