@@ -6,3 +6,29 @@ Resources:
       Type: String
       Value: true
       AllowedPattern: ^(true|false)$
+
+  ConfluenceDurationParameter:
+    Type: AWS::SSM::Parameter
+    Properties:
+      Name: ${self:provider.environment.ALERT_DURATION_PARAMETER}
+      Type: String
+      Value: 4
+      AllowedPattern: ^[0-9]*$
+
+  ConfluenceDatabase:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: ${self:provider.environment.TABLE_NAME}
+      BillingMode: PROVISIONED
+      AttributeDefinitions:
+        - AttributeName: token
+          AttributeType: S
+      KeySchema:
+        - AttributeName: token
+          KeyType: HASH
+      ProvisionedThroughput:
+        ReadCapacityUnits: 5
+        WriteCapacityUnits: 2
+      TimeToLiveSpecification:
+        AttributeName: ttl
+        Enabled: true

@@ -7,6 +7,8 @@ provider:
   region: ap-southeast-1
   environment:
     ALERT_PARAMETER: wolf_alert_status
+    ALERT_DURATION_PARAMETER: wolf_confluence_duration
+    TABLE_NAME: wolf_confluence_table
 
   iam:
     role:
@@ -14,6 +16,9 @@ provider:
         - Effect: Allow
           Action:
             - "ssm:*"
+          Resource: "*"
+        - Effect: "Allow"
+          Action: "dynamodb:*"
           Resource: "*"
 
 functions:

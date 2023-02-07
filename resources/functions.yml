@@ -31,3 +31,71 @@ UpdateAlertStatus:
             - X-Api-Key
             - X-Amz-Security-Token
             - X-Amz-User-Agent
+
+GetConfluence:
+  handler: functions/get-confluence.handler
+  timeout: 30
+  events:
+    - http:
+        method: GET
+        path: /api/confluence/{ticker}
+        cors:
+          origins: "*"
+          headers:
+            - Content-Type
+            - X-Amz-Date
+            - Authorization
+            - X-Api-Key
+            - X-Amz-Security-Token
+            - X-Amz-User-Agent
+
+UpsertConfluence:
+  handler: functions/upsert-confluence.handler
+  timeout: 30
+  events:
+    - http:
+        method: POST
+        path: /api/confluence
+        cors:
+          origins: "*"
+          headers:
+            - Content-Type
+            - X-Amz-Date
+            - Authorization
+            - X-Api-Key
+            - X-Amz-Security-Token
+            - X-Amz-User-Agent
+
+UpdateConfluenceDuration:
+  handler: functions/update-confluence-duration.handler
+  timeout: 30
+  events:
+    - http:
+        method: PATCH
+        path: /api/confluence/duration
+        cors:
+          origins: "*"
+          headers:
+            - Content-Type
+            - X-Amz-Date
+            - Authorization
+            - X-Api-Key
+            - X-Amz-Security-Token
+            - X-Amz-User-Agent
+
+GetConfluenceDuration:
+  handler: functions/get-confluence-duration.handler
+  timeout: 30
+  events:
+    - http:
+        method: GET
+        path: /api/confluence/duration
+        cors:
+          origins: "*"
+          headers:
+            - Content-Type
+            - X-Amz-Date
+            - Authorization
+            - X-Api-Key
+            - X-Amz-Security-Token
+            - X-Amz-User-Agent

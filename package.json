@@ -15,6 +15,7 @@
   },
   "homepage": "https://github.com/ianneo97/wolf-trading#readme",
   "dependencies": {
+    "@aws-sdk/client-dynamodb": "^3.266.0",
     "@aws-sdk/client-ssm": "^3.264.0"
   }
 }
